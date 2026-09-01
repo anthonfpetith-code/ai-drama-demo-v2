@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9月1日 测试2.0 · AI 漫剧效果演示</title>
+<style>
+:root {
+  --bg: #0b0c10;
+  --surface: #12141c;
+  --surface-2: #171a24;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e8eaf2;
+  --text-muted: #9aa0b4;
+  --brand: #7c6cf5;
+  --brand-2: #4b9eff;
+  --accent: #27D2BF;
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.7;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* 顶部 */
+header { padding: 72px 0 48px; text-align: center; }
+.badge {
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--brand-2);
+  border: 1px solid rgba(75, 158, 255, 0.35);
+  border-radius: 999px;
+  padding: 4px 16px;
+  margin-bottom: 20px;
+}
+header h1 {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(100deg, #e8eaf2 30%, var(--brand-2) 70%, var(--brand));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+header p { margin-top: 14px; color: var(--text-muted); font-size: 15px; }
+
+/* 主区域 */
+main { padding-bottom: 32px; display: flex; flex-direction: column; gap: 48px; }
+
+/* 视频卡片 */
+.video-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+.video-card:hover { border-color: rgba(124, 108, 245, 0.45); }
+.video-card video { display: block; width: 100%; background: #000; }
+
+.video-info { padding: 24px 28px; }
+.video-info p { color: var(--text); font-size: 15px; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.tag {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+}
+.tag.hl { color: var(--brand-2); border-color: rgba(75, 158, 255, 0.35); }
+
+/* 目录区 */
+.toc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+}
+.toc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.toc-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.toc-header .tip {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+/* 章节列表 */
+.chapters { display: flex; flex-direction: column; gap: 8px; }
+.chapter {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
+}
+.chapter:hover {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+.chapter .time {
+  flex-shrink: 0;
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand-2);
+  background: rgba(75, 158, 255, 0.1);
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-top: 1px;
+}
+.chapter .body { flex: 1; }
+.chapter .body h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.chapter .body p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.chapter .play-icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+.chapter:hover .play-icon {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+/* 底部 */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 48px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+footer .inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+/* 竞品对比 */
+.compare-section { margin-top: 8px; }
+.compare-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+}
+.compare-header { margin-bottom: 20px; }
+.compare-header h2 { font-size: 20px; font-weight: 600; }
+.compare-header p { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+.compare-table th,
+.compare-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.compare-table th {
+  color: var(--text-muted);
+  font-weight: 500;
+  background: var(--surface-2);
+  font-size: 12px;
+}
+.compare-table td:first-child { color: var(--text-muted); width: 26%; }
+.compare-table td:nth-child(2) { color: #ff7b7b; }
+.compare-table td:nth-child(3) { color: var(--accent); }
+.compare-table tr:last-child td { border-bottom: none; }
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.compare-img {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.compare-img img { display: block; width: 100%; height: auto; }
+.compare-label {
+  font-size: 12px;
+  padding: 8px 12px;
+  color: var(--text-muted);
+  background: var(--surface-2);
+}
+.compare-conclusion {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background: rgba(39, 210, 191, 0.08);
+  border: 1px solid rgba(39, 210, 191, 0.2);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.compare-conclusion strong { color: var(--accent); }
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  cursor: zoom-out;
+  padding: 24px;
+}
+.lightbox-overlay.active { opacity: 1; visibility: visible; }
+.lightbox-overlay img {
+  max-width: 100%; max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  transform: scale(0.96);
+  transition: transform 0.3s ease;
+}
+.lightbox-overlay.active img { transform: scale(1); }
+.compare-img { cursor: zoom-in; }
+
+@media (max-width: 640px) {
+  header { padding: 48px 0 32px; }
+  header h1 { font-size: 26px; }
+  .video-info { padding: 18px 20px; }
+  .toc-card { padding: 18px 20px; }
+  .chapter { padding: 12px; gap: 12px; }
+  .chapter .time { font-size: 12px; padding: 3px 8px; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .compare-table { font-size: 12px; }
+  .compare-table th, .compare-table td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>AI 漫剧效果演示</h1>
+    <p>完整链路验证：从剧本分析到自动化成片的端到端演示</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- 视频区 -->
+  <section>
+    <div class="video-card">
+      <video id="mainVideo" controls preload="metadata" playsinline src="v2.mp4"></video>
+      <div class="video-info">
+        <p>本视频为 AI 漫剧 Skills 系统的 <strong>测试2.0</strong> 完整演示，涵盖从剧本输入到成片输出的全链路自动化流程。点击下方目录可快速跳转到对应内容段。</p>
+        <div class="tags">
+          <span class="tag hl">v2.mp4</span>
+          <span class="tag">57 MB · 720p 网页版</span>
+          <span class="tag">总时长约 14 分钟</span>
+          <span class="tag">支持章节跳转</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 目录区 -->
+  <section>
+    <div class="toc-card">
+      <div class="toc-header">
+        <h2>视频内容导览</h2>
+        <span class="tip">点击时间戳跳转播放</span>
+      </div>
+      <div class="chapters" id="chapterList">
+        <div class="chapter" data-time="0">
+          <span class="time">00:00</span>
+          <div class="body">
+            <h3>开场与项目概览</h3>
+            <p>进入 第零世界 平台，展示项目 "11111" 基本信息：9:16 竖屏、电影写实风格、剧本优先模式，共 166 镜、第 1-5 集。</p>
+          </div>
+          <div class="play-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1 L10 6 L2 11 Z" fill="currentColor"/></svg></div>
+        </div>
+        <div class="chapter" data-time="120">
+          <span class="time">02:00</span>
+          <div class="body">
+            <h3>风格参数配置与资产拆解</h3>
+            <p>配置画风（T3 真人实拍/影视级）、时代（古代）、场景风格（S06b 古风言情）、审美取向（G1 女频阴柔风），执行资产拆解。</p>
+          </div>
+          <div class="play-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1 L10 6 L2 11 Z" fill="currentColor"/></svg></div>
+        </div>
+        <div class="chapter" data-time="240">
+          <span class="time">04:00</span>
+          <div class="body">
+            <h3>角色资产生成与查看</h3>
+            <p>展示角色"侯爷"的标准造型人物母图：正/侧/背/全身多视角视图，状态显示"已锁定"，可查看原图与提示词。</p>
+          </div>
+          <div class="play-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1 L10 6 L2 11 Z" fill="currentColor"/></svg></div>
+        </div>
+        <div class="chapter" data-time="360">
+          <span class="time">06:00</span>
+          <div class="body">
+            <h3>角色 QA 与批量锁定</h3>
+            <p>展示 58 个角色的完整列表，5 个已锁定（侯爷、侯夫人 qa_passed），其余角色显示 QA 状态，支持批量锁定操作。</p>
+          </div>
+          <div class="play-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1 L10 6 L2 11 Z" fill="currentColor"/></svg></div>
+        </div>
+        <div class="chapter" data-time="480">
+          <span class="time">08:00</span>
+          <div class="body">
+            <h3>图片生成进度与导入管理</h3>
+            <p>流程推进至"导入图片"阶段，展示覆盖/重导功能，多个角色状态为"生成中"，支持批量导入 ZIP 与单张覆盖。</p>
+          </div>
+          <div class="play-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1 L10 6 L2 11 Z" fill="currentColor"/></svg></div>
+        </div>
+        <div class="chapter" data-time="660">
+          <span class="time">11:00</span>
+          <div class="body">
+            <h3>证件照管理与解锁流程</h3>
+            <p>展示角色证件照列表，主角母图未解锁（等待 4 人证件照锁定：岁岁、萧景渊、沈寒霜、墨邪），部分配角已生图可用。</p>
+          </div>
+          <div class="play-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 1 L10 6 L2 11 Z" fill="currentColor"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 竞品对比 -->
+  <section class="compare-section">
+    <div class="container">
+      <div class="compare-card">
+        <div class="compare-header">
+          <h2>竞品对比：libtv vs 第零世界</h2>
+          <p>同一部 62 集古风言情剧本，两种工具的处理结果</p>
+        </div>
+
+        <table class="compare-table">
+          <tr>
+            <th>维度</th>
+            <th>libtv</th>
+            <th>第零世界 / Skills</th>
+          </tr>
+          <tr>
+            <td>长剧本处理</td>
+            <td>62 集全集喂入后严重丢内容：角色从 8 个降至 3-6 个，场景从 5 个降至 2 个</td>
+            <td>62 集全集完整解析，58 个角色全识别，多场景，166 镜（前 5 集展示段）</td>
+          </tr>
+          <tr>
+            <td>分镜数量（同 1-5 集）</td>
+            <td>29 镜</td>
+            <td>166 镜，颗粒度细 5.7 倍</td>
+          </tr>
+          <tr>
+            <td>分镜数量（完整剧本）</td>
+            <td>8-17 镜（给越多丢越多）</td>
+            <td>166 镜（前 5 集），细 9.8-20.7 倍</td>
+          </tr>
+          <tr>
+            <td>角色识别</td>
+            <td>3-8 个（不稳定，长文本下丢失）</td>
+            <td>58 个自动识别，稳定</td>
+          </tr>
+          <tr>
+            <td>资产生成</td>
+            <td>0/N 全部未生成，卡 99% 或为空</td>
+            <td>批量生成 + QA 锁定，进度可追踪</td>
+          </tr>
+          <tr>
+            <td>风格控制</td>
+            <td>全局单一段落，无法按片段/场景配置</td>
+            <td>分场景独立参数（T3 + 古代 + S06b + G1）</td>
+          </tr>
+          <tr>
+            <td>提示词结构</td>
+            <td>自然语言长段落，手动合成</td>
+            <td>结构化自动组装（画面纪律 + SFX 同步锚 + 焦段词配对）</td>
+          </tr>
+        </table>
+
+        <div class="compare-grid">
+          <div class="compare-img">
+            <img src="libtv-fulllost.png" alt="libtv 完整剧本下丢失角色">
+            <div class="compare-label">libtv：62 集全集只识别出 6 个角色，资产全空</div>
+          </div>
+          <div class="compare-img">
+            <img src="diling-comparison.png" alt="第零世界 角色列表">
+            <div class="compare-label">第零世界：58 个角色自动识别，提示词就绪，批量生成</div>
+          </div>
+        </div>
+
+        <p class="compare-conclusion">
+          <strong>本质区别</strong>：libtv 是"短篇片段工具"——剧本短了能跑但资产为空，剧本长了直接丢角色丢场景丢分镜；
+          第零世界 是"长篇剧集管线"——62 集全集完整吃进去，58 角色全识别，166 镜不丢，流程全链路跑通。
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container inner">
+    <span></span>
+  </div>
+</footer>
+
+<div id="lightbox" class="lightbox-overlay"><img src="" alt=""></div>
+
+<script>
+(function() {
+  var video = document.getElementById('mainVideo');
+  document.querySelectorAll('.chapter').forEach(function(ch) {
+    ch.addEventListener('click', function() {
+      var t = parseFloat(ch.getAttribute('data-time'));
+      video.currentTime = t;
+      video.play();
+      ch.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+
+  // Lightbox
+  var lb = document.getElementById('lightbox');
+  var lbImg = lb.querySelector('img');
+  document.querySelectorAll('.compare-img img').forEach(function(img) {
+    img.addEventListener('click', function(e) {
+      e.stopPropagation();
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  lb.addEventListener('click', function() {
+    lb.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lb.classList.contains('active')) {
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
